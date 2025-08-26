@@ -86,7 +86,7 @@ SELECT *
 FROM retail_sales
 WHERE sale_date = '2022-11-05';
 ```
-3. Retrieve transactions in **Clothing** category with quantity = 4 in **Nov 2022**  
+2. Retrieve transactions in **Clothing** category with quantity = 4 in **Nov 2022**  
 ```sql
 SELECT * 
 FROM retail_sales
@@ -94,7 +94,7 @@ WHERE category = 'Clothing' and
       quantity >= 4 and 
 	  TO_CHAR(sale_date ,'YYYY-MM') = '2022-11';
 ```
-4. Calculate **total sales per category**  
+3. Calculate **total sales per category**  
 ```sql
 SELECT category,
        SUM(total_sale) AS net_sales,
@@ -102,19 +102,19 @@ SELECT category,
 FROM retail_sales
 GROUP BY category;
 ```
-5. Find **average age** of customers purchasing **Beauty** items  
+4. Find **average age** of customers purchasing **Beauty** items  
 ```sql
 SELECT ROUND(AVG(age),1) AS average_age
 FROM retail_sales
 WHERE category = 'Beauty';
 ```
-6. Retrieve all transactions with `total_sale > 1000`  
+5. Retrieve all transactions with `total_sale > 1000`  
 ```sql
 SELECT * 
 FROM retail_sales
 WHERE total_sale > 1000;
 ```
-7. Find **number of transactions per gender in each category**  
+6. Find **number of transactions per gender in each category**  
 ```sql
 SELECT gender,
        category, 
@@ -123,7 +123,7 @@ FROM retail_sales
 GROUP BY gender , category
 ORDER BY COUNT(transactions_id);
 ```
-8. Find the **best-selling month** in each year using window functions  
+7. Find the **best-selling month** in each year using window functions  
 ```sql
 SELECT 
        year,
@@ -141,7 +141,7 @@ GROUP BY 1, 2
 ) as t1
 WHERE rank = 1
 ```
-9. Identify **Top 5 customers by highest total purchase**  
+8. Identify **Top 5 customers by highest total purchase**  
 ```sql
 SELECT customer_id, 
        SUM(total_sale) AS total_purchase 
@@ -151,14 +151,14 @@ ORDER BY SUM(total_sale)
 DESC
 LIMIT 5;
 ```
-10. Find **unique customers per category**  
+9. Find **unique customers per category**  
 ```sql
 SELECT category, 
        COUNT(DISTINCT(customer_id)) AS unique_customer
 FROM retail_sales
 GROUP BY category ;
 ```
-11. Categorize transactions by **shifts (Morning, Afternoon, Evening)** based on `sale_time`  
+10. Categorize transactions by **shifts (Morning, Afternoon, Evening)** based on `sale_time`  
 ```sql
 WITH hourly_sale
 AS
