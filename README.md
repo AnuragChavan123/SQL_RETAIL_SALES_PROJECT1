@@ -31,7 +31,7 @@ The dataset `SQL - Retail Sales Analysis_utf.csv` includes the following fields:
 - Checked for missing values across all columns  
 - Removed records with `NULL` values
 
-'''sql
+```sql
 
 SELECT * FROM retail_sales
 WHERE transactions_id IS NULL OR 
@@ -73,24 +73,110 @@ WHERE transactions_id IS NULL OR
 	  cogs IS NULL OR	
 	  total_sale IS NULL;
 
-'''   
+```   
 
 ### 2️⃣ Data Exploration
 - Counted total sales records  
 - Found distinct customers and unique product categories  
 
 ### 3️⃣ Business Analysis (Key Queries)
-1. Retrieve all sales on **2022-11-05**  
-2. Retrieve transactions in **Clothing** category with `quantity > 10` in **Nov 2022**  
-3. Calculate **total sales per category**  
-4. Find **average age** of customers purchasing **Beauty** items  
-5. Retrieve all transactions with `total_sale > 1000`  
-6. Find **number of transactions per gender in each category**  
-7. Find the **best-selling month** in each year using window functions  
-8. Identify **Top 5 customers by highest total purchase**  
-9. Find **unique customers per category**  
-10. Categorize transactions by **shifts (Morning, Afternoon, Evening)** based on `sale_time`  
-
+1. Retrieve all sales on **2022-11-05**
+```sql
+SELECT * 
+FROM retail_sales
+WHERE sale_date = '2022-11-05';
+```
+3. Retrieve transactions in **Clothing** category with quantity = 4 in **Nov 2022**  
+```sql
+SELECT * 
+FROM retail_sales
+WHERE category = 'Clothing' and 
+      quantity >= 4 and 
+	  TO_CHAR(sale_date ,'YYYY-MM') = '2022-11';
+```
+4. Calculate **total sales per category**  
+```sql
+SELECT category,
+       SUM(total_sale) AS net_sales,
+       COUNT(category) AS total_orders
+FROM retail_sales
+GROUP BY category;
+```
+5. Find **average age** of customers purchasing **Beauty** items  
+```sql
+SELECT ROUND(AVG(age),1) AS average_age
+FROM retail_sales
+WHERE category = 'Beauty';
+```
+6. Retrieve all transactions with `total_sale > 1000`  
+```sql
+SELECT * 
+FROM retail_sales
+WHERE total_sale > 1000;
+```
+7. Find **number of transactions per gender in each category**  
+```sql
+SELECT gender,
+       category, 
+       COUNT(transactions_id) AS total_purchase
+FROM retail_sales
+GROUP BY gender , category
+ORDER BY COUNT(transactions_id);
+```
+8. Find the **best-selling month** in each year using window functions  
+```sql
+SELECT 
+       year,
+       month,
+    avg_sale
+FROM 
+(    
+SELECT 
+    EXTRACT(YEAR FROM sale_date) as year,
+    EXTRACT(MONTH FROM sale_date) as month,
+    AVG(total_sale) as avg_sale,
+    RANK() OVER(PARTITION BY EXTRACT(YEAR FROM sale_date) ORDER BY AVG(total_sale) DESC) as rank
+FROM retail_sales
+GROUP BY 1, 2
+) as t1
+WHERE rank = 1
+```
+9. Identify **Top 5 customers by highest total purchase**  
+```sql
+SELECT customer_id, 
+       SUM(total_sale) AS total_purchase 
+FROM retail_sales
+GROUP BY customer_id
+ORDER BY SUM(total_sale)
+DESC
+LIMIT 5;
+```
+10. Find **unique customers per category**  
+```sql
+SELECT category, 
+       COUNT(DISTINCT(customer_id)) AS unique_customer
+FROM retail_sales
+GROUP BY category ;
+```
+11. Categorize transactions by **shifts (Morning, Afternoon, Evening)** based on `sale_time`  
+```sql
+WITH hourly_sale
+AS
+(
+SELECT *,
+    CASE
+        WHEN EXTRACT(HOUR FROM sale_time) < 12 THEN 'Morning'
+        WHEN EXTRACT(HOUR FROM sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+        ELSE 'Evening'
+    END as shift
+FROM retail_sales
+)
+SELECT 
+    shift,
+    COUNT(*) as total_orders    
+FROM hourly_sale
+GROUP BY shift;
+```
 ---
 
 ## 📊 Key Insights
