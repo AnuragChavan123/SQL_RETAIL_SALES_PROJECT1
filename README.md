@@ -29,7 +29,51 @@ The dataset `SQL - Retail Sales Analysis_utf.csv` includes the following fields:
 
 ### 1️⃣ Data Cleaning
 - Checked for missing values across all columns  
-- Removed records with `NULL` values  
+- Removed records with `NULL` values
+
+--- sql
+
+SELECT * FROM retail_sales
+WHERE transactions_id IS NULL OR 
+	  sale_date IS NULL OR	
+	  sale_time IS NULL OR	
+	  customer_id IS NULL OR	
+	  gender IS NULL OR 	
+	  age IS NULL OR	
+	  category IS NULL OR	
+	  quantity IS NULL OR	
+	  price_per_unit IS NULL OR	
+	  cogs IS NULL OR	
+	  total_sale IS NULL;
+
+SELECT COUNT(*) FROM retail_sales
+WHERE transactions_id IS NULL OR 
+	  sale_date IS NULL OR	
+	  sale_time IS NULL OR	
+	  customer_id IS NULL OR	
+	  gender IS NULL OR 	
+	  age IS NULL OR	
+	  category IS NULL OR	
+	  quantity IS NULL OR	
+	  price_per_unit IS NULL OR	
+	  cogs IS NULL OR	
+	  total_sale IS NULL;
+
+-- 
+DELETE FROM retail_sales
+WHERE transactions_id IS NULL OR 
+	  sale_date IS NULL OR	
+	  sale_time IS NULL OR	
+	  customer_id IS NULL OR	
+	  gender IS NULL OR 	
+	  age IS NULL OR	
+	  category IS NULL OR	
+	  quantity IS NULL OR	
+	  price_per_unit IS NULL OR	
+	  cogs IS NULL OR	
+	  total_sale IS NULL;
+
+---   
 
 ### 2️⃣ Data Exploration
 - Counted total sales records  
