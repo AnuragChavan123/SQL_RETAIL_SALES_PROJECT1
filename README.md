@@ -31,7 +31,7 @@ The dataset `SQL - Retail Sales Analysis_utf.csv` includes the following fields:
 - Checked for missing values across all columns  
 - Removed records with `NULL` values
 
---- sql
+'''sql
 
 SELECT * FROM retail_sales
 WHERE transactions_id IS NULL OR 
@@ -73,7 +73,7 @@ WHERE transactions_id IS NULL OR
 	  cogs IS NULL OR	
 	  total_sale IS NULL;
 
----   
+'''   
 
 ### 2️⃣ Data Exploration
 - Counted total sales records  
