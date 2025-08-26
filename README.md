@@ -14,8 +14,6 @@ The dataset contains transaction-level details such as customer demographics, sa
 4)Business Analysis: Use SQL to answer specific business questions and derive insights from the sales data.
 
 
-The goal of the project is to perform **data cleaning, exploration, and business analysis** to extract actionable insights for decision-making.
-
 ---
 
 ## 🗂 Dataset
